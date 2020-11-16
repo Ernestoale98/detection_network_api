@@ -1,42 +1,19 @@
 var express = require('express');
 var router = express.Router();
-//Mongo Configuration
-var dbConfig = require('../databases/mongodb');
-var mongoose = require('mongoose');
-mongoose.connect(dbConfig.url);
-//Mongo User Instance
-var User = require('../models/user');
-//Express Validator
-const {body, validationResult} = require('express-validator');
-//Node bcrypt
-const bcrypt = require('bcrypt');
 
-router.post('/', [
-    body('phone').isLength({min: 10, max: 10})
-        .custom(value => {
-            return User.findOne({'phone': value}).then(user => {
-                if (user) {
-                    return Promise.reject('Phone already in use');
-                }
-            })
-        }),
-    body('password').isLength({min: 5})
-        .custom((value, {req}) => {
-            if (value !== req.body.passwordConfirmation) {
-                throw new Error('Password confirmation does not match password');
-            }
-            return true;
-        })
-], function (req, res, next) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
-    }
-    User.create({
-        phone: req.body.phone,
-        password: bcrypt.hashSync(req.body.password, 10)
-    }).then(user => res.json(user))
-        .catch(error => res.json(error));
+var isAuthenticated = function (req, res, next) {
+    // if user is authenticated in the session, call the next() to call the next request handler
+    // Passport adds this method to request object. A middleware is allowed to add properties to
+    // request and response objects
+    if (req.isAuthenticated())
+        return next();
+    // if the user is not authenticated then redirect him to the login page
+    res.redirect('/');
+}
+
+/* GET home page. */
+router.get('/', isAuthenticated, function (req, res) {
+    res.json({message: "Login"});
 });
 
 module.exports = router;
