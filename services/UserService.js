@@ -2,8 +2,6 @@
 var User = require('../models/user');
 //Node bcrypt
 const bcrypt = require('bcrypt');
-//LocalStrategy of passport
-var LocalStrategy = require('passport-local').Strategy;
 
 class UserService {
 
