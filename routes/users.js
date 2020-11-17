@@ -4,7 +4,7 @@ var authMiddleware = require('../api/middlewares/authMiddleware');
 //User service
 var UserService = require('../services/UserService');
 
-/* GET home page. */
+/* GET auth user. */
 router.get('/',
     authMiddleware,
     async (req, res) => {
