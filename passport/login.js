@@ -3,7 +3,6 @@ var User = require('../models/user');
 const bcrypt = require('bcrypt');
 
 module.exports = function (passport) {
-
     passport.use('login', new LocalStrategy({
             usernameField: "phone"
         },
@@ -28,5 +27,4 @@ module.exports = function (passport) {
             );
         })
     );
-
 }
