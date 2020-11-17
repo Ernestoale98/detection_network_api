@@ -4,7 +4,7 @@ var router = express.Router();
 
 module.exports = function (passport) {
     router.post('/', passport.authenticate('login'), function (req, res) {
-        res.json({user: req.user});
+        res.json(req.user);
     });
     return router;
 }
