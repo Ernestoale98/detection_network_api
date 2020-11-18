@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var authMiddleware = require('../api/middlewares/authMiddleware');
+var authMiddleware = require('../middlewares/authMiddleware');
 //User service
-var UserService = require('../services/UserService');
+var UserService = require('../../services/UserService');
 
 /* GET auth user. */
 router.get('/',

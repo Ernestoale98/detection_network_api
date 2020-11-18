@@ -37,11 +37,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Routes
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var loginRouter = require('./routes/login')(passport);
-var signupRouter = require('./routes/signup');
-var logoutRouter = require('./routes/logout');
+var indexRouter = require('./api/routes/index');
+var usersRouter = require('./api/routes/users');
+var loginRouter = require('./api/routes/login')(passport);
+var signupRouter = require('./api/routes/signup');
+var logoutRouter = require('./api/routes/logout');
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
