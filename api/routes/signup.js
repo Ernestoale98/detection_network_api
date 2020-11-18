@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 //User service
-var UserService = require('../services/UserService');
+var UserService = require('../../services/UserService');
 //Signup validation rules
-const {signupValidationRules, validate} = require('../api/validators/signupValidator');
+const {signupValidationRules, validate} = require('../validators/signupValidator');
 
 
 //User Signup
