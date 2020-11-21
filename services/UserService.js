@@ -2,6 +2,9 @@
 var User = require('../models/user');
 //Node bcrypt
 const bcrypt = require('bcrypt');
+//Moment Instance
+var moment = require('moment');
+
 //Neo4j Connection
 var neo4j = require('neo4j-driver');
 var driver = neo4j.driver(
@@ -37,6 +40,38 @@ class UserService {
 
     static async findById(id) {
         return await User.findById(id);
+    }
+
+    static async storeRelationOfInteraction(user_id, partner_id, relation_type) {
+        return await neoSession
+            .run('MATCH (user:Person),(partner:Person) ' +
+                'WHERE user.id = $user_id and partner.id = $partner_id ' +
+                'CREATE (user)-[:' + relation_type.toUpperCase() + ' {day:"' + moment().format('YYYY-MM-DD').toString() + '"}]->(partner) ' +
+                'RETURN partner', {
+                user_id: user_id,
+                partner_id: partner_id
+            })
+            .then((result) => {
+                return result.records[0].get('partner').properties;
+            }).catch((error) => {
+                return Promise.reject('Code: ' + error.code + ' Message: ' + error.message + ' Error: ' + error.name);
+            });
+    }
+
+    static async storeRelation(user_id, partner_id, relation_type) {
+        return await neoSession
+            .run('MATCH (user:Person),(partner:Person) ' +
+                'WHERE user.id = $user_id and partner.id = $partner_id ' +
+                'CREATE (user)-[:' + relation_type.toUpperCase() + ']->(partner) ' +
+                'RETURN partner', {
+                user_id: user_id,
+                partner_id: partner_id
+            })
+            .then((result) => {
+                return result.records[0].get('partner').properties;
+            }).catch((error) => {
+                return Promise.reject('Code: ' + error.code + ' Message: ' + error.message + ' Error: ' + error.name);
+            });
     }
 
 }
